@@ -196,29 +196,14 @@ A `Promise` that simply resolves, or rejects with an error if the save could not
 
 ##### Basic usage
 
-Load the most recent browser save, only handling failure.  This should be sufficient in the majority of cases.
-
-```js
-if (Save.browser.size > 0) {
-	Save.browser.continue()
-		.catch(error => {
-			/* Failure.  Handle the error. */
-			console.error(error);
-			UI.alert(error);
-		});
-}
-else {
-	/* No browser saves exist. */
-}
-```
-
-Load the most recent browser save, handling both success and failure.
+Load the most recent browser save.  This should be sufficient in the majority of cases.
 
 ```js
 if (Save.browser.size > 0) {
 	Save.browser.continue()
 		.then(() => {
-			/* Success.  Do something special. */
+			/* Success.  Show the passage. */
+			Engine.show();
 		})
 		.catch(error => {
 			/* Failure.  Handle the error. */
@@ -495,11 +480,12 @@ A `Promise` that simply resolves, or rejects with an error if the save could not
 
 ##### Basic usage
 
-Load the auto save at the given index.  This should be sufficient in the majority of cases.
+Load auto save index `0`.  This should be sufficient in the majority of cases.
 
 ```js
-Save.browser.auto.load(index)
+Save.browser.auto.load(0)
 	.then(() => {
+		/* Success.  Show the passage. */
 		Engine.show();
 	})
 	.catch(error => {
@@ -832,11 +818,12 @@ A `Promise` that simply resolves, or rejects with an error if the save could not
 
 ##### Basic usage
 
-Load the slot save at the given index.  This should be sufficient in the majority of cases.
+Load slot save index `0`.  This should be sufficient in the majority of cases.
 
 ```js
-Save.browser.slot.load(index)
+Save.browser.slot.load(0)
 	.then(() => {
+		/* Success.  Show the passage. */
 		Engine.show();
 	})
 	.catch(error => {
@@ -1093,6 +1080,7 @@ jQuery(document.createElement('input'))
 		// You must provide the event to Save.disk.load()
 		Save.disk.load(ev)
 			.then(metadata => {
+				/* Success.  Show the passage. */
 				Engine.show();
 			})
 			.catch(error => {
@@ -1114,6 +1102,7 @@ jQuery(document.createElement('input'))
 			// You must provide the event to Save.disk.load()
 			Save.disk.load(ev)
 				.then(metadata => {
+					/* Success.  Show the passage. */
 					Engine.show();
 				})
 				.catch(error => {
@@ -1306,6 +1295,7 @@ Load the save string.  This should be sufficient in the majority of cases.
 ```js
 Save.base64.load(base64Save)
 	.then(metadata => {
+		/* Success.  Show the passage. */
 		Engine.show();
 	})
 	.catch(error => {
