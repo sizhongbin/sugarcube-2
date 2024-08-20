@@ -351,10 +351,13 @@ var Save = (() => { // eslint-disable-line no-unused-vars, no-var
 	}
 
 	function browserContinue() {
-		const newest = browserNewest();
+		let newest;
 
-		if (typeof newest.catch === 'function') {
-			return newest;
+		try {
+			newest = browserNewest();
+		}
+		catch (err) {
+			return Promise.reject(err);
 		}
 
 		return newest.type === Type.Auto
@@ -370,10 +373,12 @@ var Save = (() => { // eslint-disable-line no-unused-vars, no-var
 		const newest = findNewest();
 
 		if (newest.index === -1) {
-			return Promise.reject(new Error(L10n.get('saveErrorNonexistent')));
+			throw new Error(L10n.get('saveErrorNonexistent'));
 		}
 
-		return newest;
+		return newest.type === Type.Auto
+			? storage.get(getAutoInfoKeyFromIndex(newest.index))
+			: storage.get(getSlotInfoKeyFromIndex(newest.index));
 	}
 
 	function browserSize() {
