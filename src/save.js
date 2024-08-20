@@ -351,10 +351,10 @@ var Save = (() => { // eslint-disable-line no-unused-vars, no-var
 	}
 
 	function browserContinue() {
-		const newest = findNewest();
+		const newest = browserNewest();
 
-		if (newest.index === -1) {
-			return Promise.reject(new Error(L10n.get('saveErrorNonexistent')));
+		if (typeof newest.catch === 'function') {
+			return newest;
 		}
 
 		return newest.type === Type.Auto
@@ -364,6 +364,16 @@ var Save = (() => { // eslint-disable-line no-unused-vars, no-var
 
 	function browserIsEnabled() {
 		return autoIsEnabled() || slotIsEnabled();
+	}
+
+	function browserNewest() {
+		const newest = findNewest();
+
+		if (newest.index === -1) {
+			return Promise.reject(new Error(L10n.get('saveErrorNonexistent')));
+		}
+
+		return newest;
 	}
 
 	function browserSize() {
@@ -1078,6 +1088,7 @@ var Save = (() => { // eslint-disable-line no-unused-vars, no-var
 				clear     : { value : browserClear },
 				continue  : { value : browserContinue },
 				isEnabled : { value : browserIsEnabled },
+				newest    : { value : browserNewest },
 				size      : { get : browserSize },
 
 				// Browser Auto Saves Functions.
