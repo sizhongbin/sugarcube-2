@@ -356,8 +356,8 @@ var Save = (() => { // eslint-disable-line no-unused-vars, no-var
 		try {
 			newest = browserNewest();
 		}
-		catch (err) {
-			return Promise.reject(err);
+		catch (ex) {
+			return Promise.reject(ex);
 		}
 
 		return newest.type === Type.Auto
