@@ -140,7 +140,7 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 		}
 
 		function createSaveList() {
-			function createButton(id, classNames, kind, index, callback) {
+			function createButton(id, kind, classNames, index, callback) {
 				let text;
 
 				switch (id) {
@@ -150,8 +150,14 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 					default:       throw new Error(`buildSaves unknown ID "${id}"`);
 				}
 
+				switch (kind) {
+					case 'auto': text = `${text} ${L10n.get('savesTextBrowserAuto')}`; break;
+					case 'slot': text = `${text} ${L10n.get('savesTextBrowserSlot')}`; break;
+					default:     throw new Error(`buildSaves unknown kind "${kind}"`);
+				}
+
 				const $btn = jQuery(document.createElement('button'))
-					.attr('id', `saves-${id}-${index}`)
+					.attr('id', `saves-${id}-${kind}-${index}`)
 					.addClass(id);
 
 				if (classNames) {
@@ -160,7 +166,7 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 
 				if (callback) {
 					$btn.ariaClick({
-						label : `${text} ${kind} ${index + 1}`
+						label : `${text} ${index + 1}`
 					}, () => {
 						try {
 							callback(index);
@@ -216,8 +222,8 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 				// Add the load button.
 				$tdLoad.append(createButton(
 					'load',
+					'auto',
 					'ui-close',
-					L10n.get('savesTextBrowserAuto'),
 					index,
 					index => {
 						jQuery(document).one(':dialogclosed', () => {
@@ -233,8 +239,8 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 				// Add the delete button.
 				$tdDele.append(createButton(
 					'delete',
-					null,
-					L10n.get('savesTextBrowserAuto'),
+					'auto',
+					null
 					index,
 					index => {
 						Save.browser.auto.delete(index);
@@ -302,8 +308,8 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 					// Add the load button.
 					$tdLoad.append(createButton(
 						'load',
+						'slot',
 						'ui-close',
-						L10n.get('savesTextBrowserSlot'),
 						index,
 						index => {
 							jQuery(document).one(':dialogclosed', () => {
@@ -319,8 +325,8 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 					// Add the delete button.
 					$tdDele.append(createButton(
 						'delete',
+						'slot',
 						null,
-						L10n.get('savesTextBrowserSlot'),
 						index,
 						index => {
 							Save.browser.slot.delete(index);
@@ -348,8 +354,8 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 					// Add the save button, possibly disabled.
 					$tdLoad.append(createButton(
 						'save',
+						'slot',
 						null,
-						L10n.get('savesTextBrowserSlot'),
 						index,
 						index < Config.saves.maxSlotSaves && slotAllowed
 							? index => {
@@ -362,8 +368,8 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 					// Add the disabled delete button.
 					$tdDele.append(createButton(
 						'delete',
+						'slot',
 						null,
-						L10n.get('savesTextBrowserSlot'),
 						index
 					));
 				}
