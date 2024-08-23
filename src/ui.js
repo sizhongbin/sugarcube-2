@@ -240,7 +240,7 @@ var UI = (() => { // eslint-disable-line no-unused-vars, no-var
 				$tdDele.append(createButton(
 					'delete',
 					'auto',
-					null
+					null,
 					index,
 					index => {
 						Save.browser.auto.delete(index);
